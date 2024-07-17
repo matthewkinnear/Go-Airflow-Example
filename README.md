@@ -27,7 +27,7 @@ This project demonstrates how to fetch data from the Random User API and store i
 
 1. Build and start the Docker containers.
 2. Access the Airflow web interface at \http://localhost:8080\.
-3. Enable and trigger the \etch_and_store_data_dag\ DAG.
+3. Enable and trigger the \fetch_and_store_data_dag\ DAG.
 
 ## Technologies
 
