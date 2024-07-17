@@ -1,0 +1,54 @@
+version: '3'
+services:
+  go-app:
+    build:
+      context: ./go-app
+    container_name: go-app
+    depends_on:
+      - airflow-webserver
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "3312:5432"
+
+  airflow-webserver:
+    build: ./airflow
+    container_name: airflow-webserver
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__WEBSERVER__RBAC=True
+      - _AIRFLOW_WWW_USER_CREATE=true
+      - _AIRFLOW_WWW_USER_USERNAME=airflow
+      - _AIRFLOW_WWW_USER_PASSWORD=airflow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./config/airflow.cfg:/opt/airflow/airflow.cfg
+    ports:
+      - "8080:8080"
+    command: "airflow webserver"
+
+  airflow-scheduler:
+    build: ./airflow
+    container_name: airflow-scheduler
+    restart: always
+    depends_on:
+      - airflow-webserver
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./config/airflow.cfg:/opt/airflow/airflow.cfg
+    command: "airflow scheduler"
+
+volumes:
+  postgres_data:
