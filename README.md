@@ -5,7 +5,6 @@
 This project demonstrates how to fetch data from the Random User API and store it in a PostgreSQL database using Go, Docker, and Apache Airflow.
 
 ## Project Structure
-\\\
  airflow
     dags
        example_dag.py
@@ -16,7 +15,6 @@ This project demonstrates how to fetch data from the Random User API and store i
  config
     airflow.cfg
  docker-compose.yml
-\\\
 
 ## Components
 
